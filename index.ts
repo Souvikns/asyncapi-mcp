@@ -1,7 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import { createMcpExpressApp } from '@modelcontextprotocol/express';
 import { NodeStreamableHTTPServerTransport } from '@modelcontextprotocol/node';
-import { registerAsyncApiSpecCapabilities } from './asyncapi-spec.ts';
+import { registerAsyncApiSpecResources } from './asyncapi-spec.ts';
+import { registerTools } from './tools.ts';
 
 const TOKEN = 'sdjkadnjsdhjahdkaj';
 const PORT = Number(process.env.PORT ?? 3000);
@@ -14,7 +15,8 @@ const mcpServer = new McpServer({
     version: '1.0.0',
 });
 
-registerAsyncApiSpecCapabilities(mcpServer);
+registerAsyncApiSpecResources(mcpServer);
+registerTools(mcpServer);
 
 app.use('/mcp', (req, res, next) => {
     const authorization = req.headers.authorization;
