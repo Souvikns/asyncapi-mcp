@@ -13,7 +13,8 @@ An MCP (Model Context Protocol) server that gives AI assistants access to the As
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) v1.3.3 or later
+- [Bun](https://bun.sh) v1.3.3 or later (for local development)
+- [Node.js](https://nodejs.org) v20 or later (for deployment / production)
 
 ## Installation
 
@@ -21,7 +22,15 @@ An MCP (Model Context Protocol) server that gives AI assistants access to the As
 bun install
 ```
 
+Or with npm:
+
+```bash
+npm install
+```
+
 ## Running the Server
+
+### Local Development (Streamable HTTP)
 
 ```bash
 bun run index.ts
@@ -32,6 +41,14 @@ The server starts on `http://localhost:3000/mcp` by default. Set the `PORT` envi
 ```bash
 PORT=8080 bun run index.ts
 ```
+
+### Stdio Transport (for Deployment)
+
+```bash
+npm start
+```
+
+This runs the server over stdio, which is the standard transport for hosted MCP servers.
 
 ## Available Tools
 
@@ -171,8 +188,11 @@ Once configured, you can ask your AI assistant questions like:
 # Install dependencies
 bun install
 
-# Run the server
+# Run the HTTP server (local development)
 bun run index.ts
+
+# Run the stdio server (for deployment)
+npm start
 ```
 
 ## License
