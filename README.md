@@ -1,6 +1,10 @@
 # AsyncAPI MCP Server
 
+[![Glama](https://img.shields.io/badge/Glama-Hosted-8A2BE2?style=flat-square)](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp) [![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square)](https://www.typescriptlang.org/)
+
 An MCP (Model Context Protocol) server that gives AI assistants access to the AsyncAPI specification. Search, explore, and retrieve any version of the spec directly from your coding tool.
+
+**[Try it in your browser on Glama](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp)** — no installation required.
 
 ## Features
 
@@ -11,19 +15,48 @@ An MCP (Model Context Protocol) server that gives AI assistants access to the As
 - **Version-aware** — query any released spec version, or default to the latest
 - **Caching** — ETag/Last-Modified-based HTTP caching with a 10-minute TTL on tag lookups
 
-## Prerequisites
+## Quick Start
+
+### Remote (Glama)
+
+Use the hosted server on Glama — no local setup needed. Add the following to your MCP client configuration:
+
+```json
+{
+  "mcpServers": {
+    "asyncapi": {
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+    }
+  }
+}
+```
+
+See the [Configuration](#configuration-for-ai-coding-tools) section below for client-specific instructions.
+
+### Local (Self-hosted)
+
+<details>
+<summary>Setup instructions</summary>
+
+#### Prerequisites
 
 - [Node.js](https://nodejs.org) v20 or later
 
-## Installation
+#### Install
 
 ```bash
 npm install
 ```
 
-## Running the Server
+#### Build
 
-### Streamable HTTP (local development)
+```bash
+npm run build
+```
+
+#### Run
+
+Streamable HTTP (for local development):
 
 ```bash
 npm run dev
@@ -35,21 +68,13 @@ The server starts on `http://localhost:3000/mcp` by default. Set the `PORT` envi
 PORT=8080 npm run dev
 ```
 
-### Stdio Transport (for remote deployment)
+Stdio (for deployment):
 
 ```bash
 npm start
 ```
 
-This runs the server over stdio, which is the standard transport for hosted MCP servers.
-
-## Building
-
-```bash
-npm run build
-```
-
-Compiles TypeScript from `src/` to `dist/`.
+</details>
 
 ## Available Tools
 
@@ -69,7 +94,9 @@ Compiles TypeScript from `src/` to `dist/`.
 
 ## Configuration for AI Coding Tools
 
-The server uses the Streamable HTTP transport. Make sure the server is running before connecting your AI tool.
+### Remote (Glama hosted)
+
+Use these configs to connect to the Glama-hosted server. No local setup required.
 
 ### Claude Desktop
 
@@ -79,7 +106,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "http://localhost:3000/mcp"
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
     }
   }
 }
@@ -93,7 +120,7 @@ Add to `.cursor/mcp.json` in your project root:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "http://localhost:3000/mcp"
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
     }
   }
 }
@@ -107,7 +134,7 @@ Add to `.vscode/mcp.json` in your project root:
 {
   "servers": {
     "asyncapi": {
-      "url": "http://localhost:3000/mcp",
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp",
       "type": "http"
     }
   }
@@ -122,7 +149,7 @@ Add to your Windsurf MCP settings:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "http://localhost:3000/mcp"
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
     }
   }
 }
@@ -136,7 +163,7 @@ In Cline's MCP settings, add:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "http://localhost:3000/mcp"
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
     }
   }
 }
@@ -151,7 +178,7 @@ Add to your OpenCode configuration:
   "mcp": {
     "servers": {
       "asyncapi": {
-        "url": "http://localhost:3000/mcp"
+        "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
       }
     }
   }
@@ -166,10 +193,75 @@ Add to your Zed `settings.json`:
 {
   "context_servers": {
     "asyncapi": {
+      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+    }
+  }
+}
+```
+
+---
+
+### Local (Self-hosted)
+
+Use these configs when running the server locally with `npm run dev`. Make sure the server is running before connecting.
+
+### Claude Desktop
+
+```json
+{
+  "mcpServers": {
+    "asyncapi": {
       "url": "http://localhost:3000/mcp"
     }
   }
 }
+```
+
+### Cursor
+
+```json
+{
+  "mcpServers": {
+    "asyncapi": {
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+### VS Code Copilot
+
+```json
+{
+  "servers": {
+    "asyncapi": {
+      "url": "http://localhost:3000/mcp",
+      "type": "http"
+    }
+  }
+}
+```
+
+### Windsurf / Cline / OpenCode / Zed
+
+Replace the Glama URL in the configs above with `http://localhost:3000/mcp`.
+
+## Deployment
+
+This server is deployed on [Glama.ai](https://glama.ai). See [glama.ai/mcp/servers/Souvikns/asyncapi-mcp](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp) for the hosted instance.
+
+To deploy your own instance, build and run with stdio transport:
+
+```bash
+npm run build
+npm start
+```
+
+A `Dockerfile` is included for containerized deployments:
+
+```bash
+docker build -t asyncapi-mcp .
+docker run -p 3000:3000 asyncapi-mcp
 ```
 
 ## Usage Examples
@@ -197,6 +289,9 @@ npm run dev
 
 # Run the stdio server (for deployment)
 npm start
+
+# Type-check without emitting
+npx tsc --noEmit
 ```
 
 ## License
