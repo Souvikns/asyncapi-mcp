@@ -4,7 +4,6 @@ import { NodeStreamableHTTPServerTransport } from '@modelcontextprotocol/node';
 import { registerAsyncApiSpecResources } from './asyncapi-spec.ts';
 import { registerTools } from './tools.ts';
 
-const TOKEN = 'sdjkadnjsdhjahdkaj';
 const PORT = Number(process.env.PORT ?? 3000);
 
 const app = createMcpExpressApp();
@@ -17,18 +16,6 @@ const mcpServer = new McpServer({
 
 registerAsyncApiSpecResources(mcpServer);
 registerTools(mcpServer);
-
-app.use('/mcp', (req, res, next) => {
-    const authorization = req.headers.authorization;
-    const expectedAuthorization = `Bearer ${TOKEN}`;
-
-    if (authorization !== expectedAuthorization) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
-    }
-
-    next();
-});
 
 app.post('/mcp', async (req, res) => {
     const transport = new NodeStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
