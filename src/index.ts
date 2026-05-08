@@ -1,8 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import { createMcpExpressApp } from '@modelcontextprotocol/express';
 import { NodeStreamableHTTPServerTransport } from '@modelcontextprotocol/node';
-import { registerAsyncApiSpecResources } from './asyncapi-spec.ts';
-import { registerTools } from './tools.ts';
+import { registerAsyncApiSpecResources } from './asyncapi-spec.js';
+import { registerTools } from './tools.js';
 
 const PORT = Number(process.env.PORT ?? 3000);
 

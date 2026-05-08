@@ -8,7 +8,7 @@ import {
     getSpecMetadata,
     listAsyncApiSpecVersions,
     searchSpec,
-} from './asyncapi-spec.ts';
+} from './asyncapi-spec.js';
 
 export const registerTools = (mcpServer: McpServer) => {
     mcpServer.registerTool(

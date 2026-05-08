@@ -6,5 +6,6 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
+RUN npm run build
 
-CMD ["mcp-proxy", "--", "node", "--import", "tsx/esm", "stdio.ts"]
+CMD ["mcp-proxy", "--", "node", "dist/stdio.js"]

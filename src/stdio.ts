@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { registerAsyncApiSpecResources } from './asyncapi-spec.ts';
-import { registerTools } from './tools.ts';
+import { registerAsyncApiSpecResources } from './asyncapi-spec.js';
+import { registerTools } from './tools.js';
 
 const mcpServer = new McpServer({
     name: 'AsyncAPI MCP Server',

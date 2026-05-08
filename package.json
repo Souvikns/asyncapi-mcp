@@ -1,17 +1,16 @@
 {
   "name": "asyncapi-mcp",
-  "module": "index.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run index.ts",
-    "start": "node --import tsx/esm stdio.ts",
-    "start:http": "node --import tsx/esm index.ts"
+    "build": "tsc",
+    "start": "node dist/stdio.js",
+    "start:http": "node dist/index.js",
+    "dev": "node --import tsx/esm src/index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "tsx": "^4.19.4",
-    "typescript": "^5"
+    "typescript": "^5.7.0"
   },
   "dependencies": {
     "@cfworker/json-schema": "^4.1.1",

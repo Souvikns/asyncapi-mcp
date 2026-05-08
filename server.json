@@ -13,8 +13,7 @@
       "identifier": "asyncapi-mcp",
       "version": "1.0.0",
       "transport": {
-        "type": "streamable-http",
-        "url": "http://localhost:3000/mcp"
+        "type": "stdio"
       }
     }
   ]
