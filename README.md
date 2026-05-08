@@ -293,7 +293,3 @@ npm start
 # Type-check without emitting
 npx tsc --noEmit
 ```
-
-## License
-
-MIT
