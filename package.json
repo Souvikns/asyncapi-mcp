@@ -2,6 +2,7 @@
   "name": "asyncapi-mcp",
   "type": "module",
   "private": true,
+  "version": "0.2.0",
   "scripts": {
     "build": "tsc",
     "start": "node dist/stdio.js",
