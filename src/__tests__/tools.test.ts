@@ -65,6 +65,14 @@ function createMockCore() {
         return String(error);
     });
 
+    const validateAsyncApiSpec = vi.fn().mockResolvedValue({
+        valid: true,
+        errorCount: 0,
+        warningCount: 0,
+        errors: [],
+        warnings: [],
+    });
+
     return {
         listAsyncApiSpecVersions,
         fetchAsyncApiSpec,
@@ -72,6 +80,7 @@ function createMockCore() {
         searchSpec,
         getSectionText,
         formatUnknownError,
+        validateAsyncApiSpec,
     };
 }
 
@@ -93,6 +102,10 @@ describe('registerTools', () => {
             formatUnknownError: mocks.formatUnknownError,
         }));
 
+        vi.doMock('../asyncapi-parser.js', () => ({
+            validateAsyncApiSpec: mocks.validateAsyncApiSpec,
+        }));
+
         const { registerTools } = await import('../tools.js');
         const { server, calls: c } = createMockMcpServer();
         calls = c;
@@ -101,10 +114,11 @@ describe('registerTools', () => {
 
     afterEach(() => {
         vi.doUnmock('../asyncapi-spec.js');
+        vi.doUnmock('../asyncapi-parser.js');
     });
 
-    it('registers exactly 4 tools', () => {
-        expect(calls).toHaveLength(4);
+    it('registers exactly 5 tools', () => {
+        expect(calls).toHaveLength(5);
     });
 
     it('registers tools with correct names', () => {
@@ -112,6 +126,7 @@ describe('registerTools', () => {
         expect(names).toContain('list_asyncapi_spec_versions');
         expect(names).toContain('get_asyncapi_spec_metadata');
         expect(names).toContain('search_asyncapi_spec');
+        expect(names).toContain('validate_asyncapi_spec');
         expect(names).toContain('get_asyncapi_spec_section');
     });
 
@@ -202,6 +217,50 @@ describe('registerTools', () => {
             const result = await handler({ version: undefined, query: 'test', limit: 10 }) as { isError: boolean; content: { type: string; text: string }[] };
 
             expect(result.isError).toBe(true);
+        });
+    });
+
+    describe('validate_asyncapi_spec', () => {
+        let handler: ToolHandler;
+
+        beforeEach(() => {
+            handler = calls.find(c => c.name === 'validate_asyncapi_spec')!.handler;
+        });
+
+        it('returns valid result for valid spec content', async () => {
+            const spec = 'asyncapi: 3.1.0\ninfo:\n  title: Test\n  version: 1.0.0\nchannels: {}\noperations: {}\n';
+
+            const result = await handler({ spec });
+
+            expect(mocks.validateAsyncApiSpec).toHaveBeenCalledWith(spec);
+            const output = (result as { structuredContent: { valid: boolean; errorCount: number } }).structuredContent;
+            expect(output.valid).toBe(true);
+            expect(output.errorCount).toBe(0);
+        });
+
+        it('returns validation errors for invalid spec content', async () => {
+            mocks.validateAsyncApiSpec.mockResolvedValueOnce({
+                valid: false,
+                errorCount: 1,
+                warningCount: 0,
+                errors: [{ message: '"info" property must have required property "version"', path: 'info', severity: 'error' }],
+                warnings: [],
+            });
+
+            const result = await handler({ spec: 'asyncapi: 3.1.0\ninfo:\n  title: Test\n' });
+
+            const output = (result as { structuredContent: { valid: boolean; errors: { message: string }[] } }).structuredContent;
+            expect(output.valid).toBe(false);
+            expect(output.errors[0]!.message).toContain('version');
+        });
+
+        it('returns error on unexpected validation failure', async () => {
+            mocks.validateAsyncApiSpec.mockRejectedValueOnce(new Error('parser failed'));
+
+            const result = await handler({ spec: 'asyncapi: 3.1.0' }) as { isError: boolean; content: { type: string; text: string }[] };
+
+            expect(result.isError).toBe(true);
+            expect(result.content[0]!.text).toBe('parser failed');
         });
     });
 

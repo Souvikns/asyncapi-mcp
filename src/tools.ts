@@ -9,6 +9,7 @@ import {
     listAsyncApiSpecVersions,
     searchSpec,
 } from './asyncapi-spec.js';
+import { validateAsyncApiSpec } from './asyncapi-parser.js';
 
 export const registerTools = (mcpServer: McpServer) => {
     mcpServer.registerTool(
@@ -104,6 +105,32 @@ export const registerTools = (mcpServer: McpServer) => {
                 return {
                     content: [{ type: 'text', text: JSON.stringify(output, null, 2) }],
                     structuredContent: output,
+                };
+            } catch (error) {
+                return {
+                    isError: true,
+                    content: [{ type: 'text', text: formatUnknownError(error) }],
+                };
+            }
+        }
+    );
+
+    mcpServer.registerTool(
+        'validate_asyncapi_spec',
+        {
+            title: 'Validate AsyncAPI Spec',
+            description: 'Validate raw AsyncAPI YAML or JSON content and return validation errors if the spec is invalid.',
+            inputSchema: z.object({
+                spec: z.string().min(1).describe('Raw AsyncAPI document content as YAML or JSON.'),
+            }),
+        },
+        async ({ spec }) => {
+            try {
+                const validation = await validateAsyncApiSpec(spec);
+
+                return {
+                    content: [{ type: 'text', text: JSON.stringify(validation, null, 2) }],
+                    structuredContent: validation,
                 };
             } catch (error) {
                 return {

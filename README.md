@@ -83,6 +83,7 @@ npm start
 | `list_asyncapi_spec_versions` | List stable AsyncAPI spec versions available as GitHub tags | None |
 | `get_asyncapi_spec_metadata` | Return source, version, cache, and size metadata for a spec | `version` (optional) |
 | `search_asyncapi_spec` | Search the spec and return matching snippets | `query` (required), `version` (optional), `limit` (default: 10, max: 20) |
+| `validate_asyncapi_spec` | Validate raw AsyncAPI YAML or JSON content and return validation errors | `spec` (required) |
 | `get_asyncapi_spec_section` | Return a section by heading text or slug | `heading` (required), `version` (optional) |
 
 ## Available Resources
