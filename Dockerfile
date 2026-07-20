@@ -8,4 +8,6 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-CMD ["mcp-proxy", "--", "node", "dist/stdio.js"]
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]

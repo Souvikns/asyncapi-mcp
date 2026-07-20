@@ -1,10 +1,8 @@
 # AsyncAPI MCP Server
 
-[![Glama](https://img.shields.io/badge/Glama-Hosted-8A2BE2?style=flat-square)](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp) [![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square)](https://www.typescriptlang.org/)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](./LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square)](https://www.typescriptlang.org/)
 
 An MCP (Model Context Protocol) server that gives AI assistants access to the AsyncAPI specification. Search, explore, and retrieve any version of the spec directly from your coding tool.
-
-**[Try it in your browser on Glama](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp)** — no installation required.
 
 ## Features
 
@@ -17,21 +15,21 @@ An MCP (Model Context Protocol) server that gives AI assistants access to the As
 
 ## Quick Start
 
-### Remote (Glama)
+### Remote (Self-hosted on Render)
 
-Use the hosted server on Glama — no local setup needed. Add the following to your MCP client configuration:
+The recommended way to use this server is to deploy your own instance on Render — it's free (no credit card required). Add the following to your MCP client configuration:
 
 ```json
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
 ```
 
-See the [Configuration](#configuration-for-ai-coding-tools) section below for client-specific instructions.
+See the [Configuration](#configuration-for-ai-coding-tools) section below for client-specific instructions, and the [Deployment](#deployment) section for setup steps.
 
 ### Local (Self-hosted)
 
@@ -68,10 +66,10 @@ The server starts on `http://localhost:3000/mcp` by default. Set the `PORT` envi
 PORT=8080 npm run dev
 ```
 
-Stdio (for deployment):
+Stdio (for local MCP clients):
 
 ```bash
-npm start
+npm run start:stdio
 ```
 
 </details>
@@ -95,9 +93,9 @@ npm start
 
 ## Configuration for AI Coding Tools
 
-### Remote (Glama hosted)
+### Remote (Render hosted)
 
-Use these configs to connect to the Glama-hosted server. No local setup required.
+Use these configs to connect to your self-hosted Render instance. Make sure you've [deployed the server](#deployment) first.
 
 ### Claude Desktop
 
@@ -107,7 +105,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
@@ -121,7 +119,7 @@ Add to `.cursor/mcp.json` in your project root:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
@@ -135,7 +133,7 @@ Add to `.vscode/mcp.json` in your project root:
 {
   "servers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp",
+      "url": "https://<your-service-name>.onrender.com/mcp",
       "type": "http"
     }
   }
@@ -150,7 +148,7 @@ Add to your Windsurf MCP settings:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
@@ -164,7 +162,7 @@ In Cline's MCP settings, add:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
@@ -179,7 +177,7 @@ Add to your OpenCode configuration:
   "mcp": {
     "servers": {
       "asyncapi": {
-        "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+        "url": "https://<your-service-name>.onrender.com/mcp"
       }
     }
   }
@@ -194,7 +192,7 @@ Add to your Zed `settings.json`:
 {
   "context_servers": {
     "asyncapi": {
-      "url": "https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp"
+      "url": "https://<your-service-name>.onrender.com/mcp"
     }
   }
 }
@@ -245,25 +243,74 @@ Use these configs when running the server locally with `npm run dev`. Make sure 
 
 ### Windsurf / Cline / OpenCode / Zed
 
-Replace the Glama URL in the configs above with `http://localhost:3000/mcp`.
+Replace the Render URL in the configs above with `http://localhost:3000/mcp`.
 
 ## Deployment
 
-This server is deployed on [Glama.ai](https://glama.ai). See [glama.ai/mcp/servers/Souvikns/asyncapi-mcp](https://glama.ai/mcp/servers/Souvikns/asyncapi-mcp) for the hosted instance.
+### Render (Recommended — Free, easy setup)
 
-To deploy your own instance, build and run with stdio transport:
+[Render](https://render.com) provides a free web service tier with no credit card required. This is the easiest way to host your MCP server.
 
-```bash
-npm run build
-npm start
+#### Free tier behavior
+
+- **750 free instance hours per month** — plenty for a single MCP server
+- **Sleeps after 15 minutes of idle time** — the service spins down when nobody is using it
+- **Wakes up on next request** — takes about 30–60 seconds to respond after sleep
+- **No credit card required** — truly $0
+
+#### Prerequisites
+
+- A [Render account](https://dashboard.render.com/register)
+- Your code pushed to a public GitHub repository
+
+#### Deploy via Git
+
+1. In the Render dashboard, click **New** → **Web Service**.
+2. Connect your **GitHub** account and select your repository.
+3. Render will auto-detect the Node.js buildpack.
+4. Set the following:
+   - **Name**: `asyncapi-mcp` (or whatever you prefer)
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Instance Type**: `Free`
+5. Add environment variable:
+   - `PORT` = `3000`
+6. Click **Create Web Service**.
+
+Render will build and deploy your app. Once finished, you'll get a public URL like `https://<your-service-name>.onrender.com`.
+
+#### Configure your MCP client
+
+Replace `<your-service-name>.onrender.com` in the [Configuration](#configuration-for-ai-coding-tools) section above with your actual Render domain.
+
+#### Health check
+
+You can verify the server is running by visiting:
+```
+https://<your-service-name>.onrender.com/health
 ```
 
-A `Dockerfile` is included for containerized deployments:
+### Self-hosted (Docker)
+
+Build and run with the included `Dockerfile`:
 
 ```bash
 docker build -t asyncapi-mcp .
 docker run -p 3000:3000 asyncapi-mcp
 ```
+
+The HTTP server will be available at `http://localhost:3000/mcp`.
+
+### Self-hosted (Local machine)
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+The server starts on `http://localhost:3000/mcp` by default.
 
 ## Usage Examples
 
@@ -288,8 +335,8 @@ npm run build
 # Run the HTTP server (local development)
 npm run dev
 
-# Run the stdio server (for deployment)
-npm start
+# Run the stdio server (for local MCP clients)
+npm run start:stdio
 
 # Type-check without emitting
 npx tsc --noEmit

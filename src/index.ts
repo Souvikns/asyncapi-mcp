@@ -8,6 +8,10 @@ const PORT = Number(process.env.PORT ?? 3000);
 
 const app = createMcpExpressApp();
 
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', server: 'AsyncAPI MCP Server' });
+});
+
 const mcpServer = new McpServer({
     name: 'AsyncAPI MCP Server',
     description: 'An MCP server implemented using Express.js',
