@@ -6,7 +6,7 @@ import { registerTools } from './tools.js';
 
 const PORT = Number(process.env.PORT ?? 3000);
 
-const app = createMcpExpressApp();
+const app = createMcpExpressApp({ host: '0.0.0.0' });
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', server: 'AsyncAPI MCP Server' });
