@@ -23,7 +23,7 @@ The recommended way to use this server is to deploy your own instance on Render 
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -105,7 +105,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -119,7 +119,7 @@ Add to `.cursor/mcp.json` in your project root:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -133,7 +133,7 @@ Add to `.vscode/mcp.json` in your project root:
 {
   "servers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp",
+      "url": "https://asyncapi-mcp.onrender.com/mcp",
       "type": "http"
     }
   }
@@ -148,7 +148,7 @@ Add to your Windsurf MCP settings:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -162,7 +162,7 @@ In Cline's MCP settings, add:
 {
   "mcpServers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -177,7 +177,7 @@ Add to your OpenCode configuration:
   "mcp": {
     "servers": {
       "asyncapi": {
-        "url": "https://<your-service-name>.onrender.com/mcp"
+        "url": "https://asyncapi-mcp.onrender.com/mcp"
       }
     }
   }
@@ -192,7 +192,7 @@ Add to your Zed `settings.json`:
 {
   "context_servers": {
     "asyncapi": {
-      "url": "https://<your-service-name>.onrender.com/mcp"
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
     }
   }
 }
@@ -278,17 +278,17 @@ Replace the Render URL in the configs above with `http://localhost:3000/mcp`.
    - `PORT` = `3000`
 6. Click **Create Web Service**.
 
-Render will build and deploy your app. Once finished, you'll get a public URL like `https://<your-service-name>.onrender.com`.
+Render will build and deploy your app. Once finished, you'll get a public URL like `https://asyncapi-mcp.onrender.com`.
 
 #### Configure your MCP client
 
-Replace `<your-service-name>.onrender.com` in the [Configuration](#configuration-for-ai-coding-tools) section above with your actual Render domain.
+Your Render domain is already configured in the [Configuration](#configuration-for-ai-coding-tools) section above.
 
 #### Health check
 
 You can verify the server is running by visiting:
 ```
-https://<your-service-name>.onrender.com/health
+https://asyncapi-mcp.onrender.com/health
 ```
 
 ### Self-hosted (Docker)
