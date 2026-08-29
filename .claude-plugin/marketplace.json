@@ -1,0 +1,13 @@
+{
+  "name": "asyncapi-mcp",
+  "owner": {
+    "name": "Souvikns"
+  },
+  "plugins": [
+    {
+      "name": "asyncapi-mcp",
+      "source": "./",
+      "description": "Search, explore, and validate the AsyncAPI specification directly from your coding agent."
+    }
+  ]
+}

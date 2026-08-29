@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "asyncapi-mcp",
+  "description": "Search, explore, and validate the AsyncAPI specification directly from your coding agent.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Souvikns"
+  },
+  "homepage": "https://github.com/Souvikns/asyncapi-mcp",
+  "license": "MIT",
+  "mcpServers": {
+    "asyncapi": {
+      "type": "http",
+      "url": "https://asyncapi-mcp.onrender.com/mcp"
+    }
+  }
+}
