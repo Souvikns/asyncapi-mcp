@@ -10,8 +10,8 @@ const CONFIG_SNIPPET = `{
   }
 }`;
 
-const PLUGIN_SNIPPET = `claude plugin marketplace add Souvikns/asyncapi-mcp
-/plugin install asyncapi-mcp@asyncapi-mcp`;
+const PLUGIN_MARKETPLACE_SNIPPET = `claude plugin marketplace add Souvikns/asyncapi-mcp`;
+const PLUGIN_INSTALL_SNIPPET = `/plugin install asyncapi-mcp@asyncapi-mcp`;
 
 const TOOLS = [
     {
@@ -180,7 +180,8 @@ const Landing = () => (
                         </div>
                     </div>
                 </div>
-                <CodeWindow title="Claude Code" snippet={PLUGIN_SNIPPET} />
+                <CodeWindow title="Terminal" snippet={PLUGIN_MARKETPLACE_SNIPPET} />
+                <CodeWindow title="Inside Claude Code" snippet={PLUGIN_INSTALL_SNIPPET} />
                 <CodeWindow title="mcpServers" snippet={CONFIG_SNIPPET} />
             </div>
             <p className="muted ask-examples">

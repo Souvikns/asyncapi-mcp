@@ -6,13 +6,25 @@ export interface RateLimiterOptions {
     max?: number;
 }
 
+const parsePositiveInt = (raw: string | undefined, fallback: number, envVarName: string): number => {
+    if (raw === undefined) {
+        return fallback;
+    }
+    const parsed = Number(raw);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+        console.warn(`Invalid ${envVarName}="${raw}" — falling back to default ${fallback}`);
+        return fallback;
+    }
+    return parsed;
+};
+
 export const createRateLimiter = (options: RateLimiterOptions = {}): RequestHandler => {
-    const windowMs = options.windowMs ?? Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60_000);
-    const max = options.max ?? Number(process.env.RATE_LIMIT_MAX ?? 60);
+    const windowMs = options.windowMs ?? parsePositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000, 'RATE_LIMIT_WINDOW_MS');
+    const max = options.max ?? parsePositiveInt(process.env.RATE_LIMIT_MAX, 60, 'RATE_LIMIT_MAX');
 
     return rateLimit({
         windowMs,
-        max,
+        limit: max,
         standardHeaders: true,
         legacyHeaders: false,
         message: { error: 'Too many requests, try again later.' },

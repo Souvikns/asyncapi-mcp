@@ -12,8 +12,19 @@ import { registerTools } from './tools.js';
 
 const PORT = Number(process.env.PORT ?? 3000);
 
-const app = createMcpExpressApp({ host: '0.0.0.0' });
+const allowedHosts = process.env.ALLOWED_HOSTS?.split(',')
+    .map(host => host.trim())
+    .filter(Boolean);
+
+const app = createMcpExpressApp({
+    host: '0.0.0.0',
+    ...(allowedHosts && allowedHosts.length > 0 ? { allowedHosts } : {}),
+});
 app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 1));
+
+console.log(
+    `Config: TRUST_PROXY_HOPS=${process.env.TRUST_PROXY_HOPS ?? '1 (default)'}, ALLOWED_HOSTS=${allowedHosts?.join(',') ?? '(none set)'}`
+);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', server: 'AsyncAPI MCP Server' });

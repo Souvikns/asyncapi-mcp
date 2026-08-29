@@ -23,6 +23,11 @@ The server runs a free public instance at `https://asyncapi-mcp.onrender.com` �
 
 ```bash
 claude plugin marketplace add Souvikns/asyncapi-mcp
+```
+
+Then, inside a Claude Code session:
+
+```
 /plugin install asyncapi-mcp@asyncapi-mcp
 ```
 
@@ -102,7 +107,7 @@ npm run start:stdio
 
 ## Rate Limiting
 
-The `/mcp` endpoint has no authentication — it's rate-limited per IP address instead (60 requests per minute by default). Exceeding the limit returns a `429` response with a `Retry-After` header. The `/health` endpoint is never rate-limited, so platform health checks always succeed. Limits are configurable via the `RATE_LIMIT_MAX` and `RATE_LIMIT_WINDOW_MS` environment variables if you're running your own instance.
+The `/mcp` endpoint has no authentication — it's rate-limited per IP address instead (60 requests per minute by default). Exceeding the limit returns a `429` response with a `Retry-After` header. The `/health` endpoint is never rate-limited, so platform health checks always succeed. Limits are configurable via the `RATE_LIMIT_MAX` and `RATE_LIMIT_WINDOW_MS` environment variables if you're running your own instance. Behind a reverse proxy (like Render's), set `TRUST_PROXY_HOPS` to the number of proxy hops in front of the app (verify by logging the effective config — see the startup log) so IP-based limiting isn't trivially bypassable, and set `ALLOWED_HOSTS` to your public hostname(s) (comma-separated) to restore DNS-rebinding protection.
 
 ## Configuration for AI Coding Tools
 
@@ -112,8 +117,15 @@ Use these configs to connect to the hosted instance at `https://asyncapi-mcp.onr
 
 ### Claude Code
 
+From your terminal, add the marketplace:
+
 ```bash
 claude plugin marketplace add Souvikns/asyncapi-mcp
+```
+
+Then, inside a Claude Code session, install the plugin:
+
+```
 /plugin install asyncapi-mcp@asyncapi-mcp
 ```
 
@@ -284,16 +296,22 @@ Replace the Render URL in the configs above with `http://localhost:3000/mcp`.
    - `PORT` = `3000`
    - `NODE_ENV` = `production`
    - `TRUST_PROXY_HOPS` = `1` (verify this against Render's actual proxy chain post-deploy — see [Rate Limiting](#rate-limiting))
+   - `ALLOWED_HOSTS` = `asyncapi-mcp.onrender.com` (restores DNS-rebinding protection; use your own domain if self-hosting under a different one)
 6. Click **Create Web Service**.
 
 Render will build and deploy your app. Once finished, you'll get a public URL like `https://asyncapi-mcp.onrender.com` — visiting it shows the website, and the server is immediately usable with no signup step.
 
 #### Publish it as a Claude Code plugin
 
-This repo already includes `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. If you deploy your own instance, update the `url` in `.claude-plugin/plugin.json` to point at your Render URL, then anyone can install it with:
+This repo already includes `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`. If you deploy your own instance, update the `url` in `.claude-plugin/plugin.json` to point at your Render URL. Anyone can then install it in two steps: first, from a terminal, add your fork as a marketplace —
 
 ```bash
 claude plugin marketplace add <your-github-username>/<your-repo>
+```
+
+— and then, inside a Claude Code session (not a shell — this is a Claude Code slash command), install the plugin from it:
+
+```
 /plugin install asyncapi-mcp@asyncapi-mcp
 ```
 
@@ -355,7 +373,7 @@ npm run dev
 This builds the website on first run and starts the server. Then visit **http://localhost:3000**, or use `http://localhost:3000/mcp` directly in your MCP client config — no signup or API key needed.
 
 ```bash
-# In another terminal: run the website dev server with hot reload (proxies API calls to :3000)
+# In another terminal: run the website dev server with hot reload
 npm run dev:web
 
 # Build TypeScript to dist/ and the website to web/dist/
