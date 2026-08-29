@@ -9,7 +9,6 @@
     "start:stdio": "node dist/stdio.js",
     "dev": "node --import tsx/esm src/index.ts",
     "dev:web": "npm --prefix web run dev",
-    "start:local": "bash scripts/start-local.sh",
     "test": "vitest run",
     "test:watch": "vitest"
   },
