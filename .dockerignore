@@ -3,6 +3,8 @@
 Dockerfile
 .dockerignore
 node_modules
+web/node_modules
 dist
+web/dist
 .env
 README.md
