@@ -6,25 +6,17 @@ import { createMcpExpressApp } from '@modelcontextprotocol/express';
 import { NodeStreamableHTTPServerTransport } from '@modelcontextprotocol/node';
 import express from 'express';
 
-import { requireApiKey } from './api-keys.js';
-import { initDatabase } from './db.js';
-import { authRouter } from './routes/auth.js';
-import { keysRouter } from './routes/keys.js';
+import { mcpRateLimiter } from './rate-limit.js';
 import { registerAsyncApiSpecResources } from './asyncapi-spec.js';
 import { registerTools } from './tools.js';
 
 const PORT = Number(process.env.PORT ?? 3000);
 
 const app = createMcpExpressApp({ host: '0.0.0.0' });
+app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 1));
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', server: 'AsyncAPI MCP Server' });
-});
-
-app.use('/api/auth', authRouter);
-app.use('/api/keys', keysRouter);
-app.use('/api', (req, res) => {
-    res.status(404).json({ error: 'Not found' });
 });
 
 const mcpServer = new McpServer({
@@ -36,7 +28,7 @@ const mcpServer = new McpServer({
 registerAsyncApiSpecResources(mcpServer);
 registerTools(mcpServer);
 
-app.use('/mcp', requireApiKey);
+app.use('/mcp', mcpRateLimiter);
 
 app.post('/mcp', async (req, res) => {
     const transport = new NodeStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
@@ -65,8 +57,6 @@ app.use((error: unknown, req: express.Request, res: express.Response, next: expr
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
-await initDatabase();
 
 const httpServer = app.listen(PORT, () => {
     console.log(`MCP server is running on http://localhost:${PORT}/mcp`);
