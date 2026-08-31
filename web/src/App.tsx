@@ -2,18 +2,12 @@ import { Route, Routes } from 'react-router-dom';
 
 import Landing from './pages/Landing';
 
-const SpikeMark = () => (
+/** A message packet mid-transit between two channel rails — the page's recurring motif at icon scale. */
+const ChannelMark = () => (
     <span className="nav-mark" aria-hidden="true">
-        <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-        >
-            <path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9L4.9 19.1" />
+        <svg width="20" height="16" viewBox="0 0 24 18" fill="none">
+            <path d="M1 3h22M1 15h22" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <rect className="mark-packet" x="9" y="6" width="6" height="6" rx="0.5" fill="currentColor" />
         </svg>
     </span>
 );
@@ -21,7 +15,7 @@ const SpikeMark = () => (
 const Nav = () => (
     <header className="nav">
         <a href="/" className="nav-brand">
-            <SpikeMark /> AsyncAPI MCP
+            <ChannelMark /> AsyncAPI MCP
         </a>
         <nav className="nav-links">
             <a
@@ -30,7 +24,7 @@ const Nav = () => (
                 target="_blank"
                 rel="noreferrer"
             >
-                GitHub
+                GitHub&nbsp;↗
             </a>
         </nav>
     </header>
@@ -49,9 +43,12 @@ const App = () => (
             <div className="footer-inner">
                 <div>
                     <span className="footer-brand">
-                        <SpikeMark /> AsyncAPI MCP
+                        <span className="footer-mark">
+                            <ChannelMark />
+                        </span>
+                        AsyncAPI MCP
                     </span>
-                    <p>Open source under the MIT license.</p>
+                    <p>Open source, MIT licensed.</p>
                 </div>
                 <nav className="footer-links">
                     <a href="https://github.com/asyncapi/spec" target="_blank" rel="noreferrer">
@@ -60,6 +57,7 @@ const App = () => (
                     <a href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">
                         Model Context Protocol
                     </a>
+                    <span className="footer-doc-no">DOC — ASYNC-MCP</span>
                 </nav>
             </div>
         </footer>
